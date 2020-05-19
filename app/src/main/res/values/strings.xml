@@ -7,4 +7,6 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="nama_lengkap">Nama Lengkap</string>
+    <string name="home">Home</string>
+    <string name="user">User</string>
 </resources>

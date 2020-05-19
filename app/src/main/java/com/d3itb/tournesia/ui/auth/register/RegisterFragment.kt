@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.model.Token
 import com.d3itb.tournesia.model.User
+import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -77,7 +78,7 @@ class RegisterFragment : Fragment() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> if (token.data != null) {
                         showLoading(false)
-                        saveToken(token.data)
+                        TokenPreference.getInstance(requireContext()).saveToken(token.data.data)
                         view?.findNavController()?.navigate(R.id.action_registerFragment_to_homeActivity)
                     }
                     Status.ERROR -> {
@@ -87,11 +88,6 @@ class RegisterFragment : Fragment() {
                 }
             }
         })
-    }
-
-    private fun saveToken(token: Token) {
-        val sf = requireContext().getSharedPreferences(getString(R.string.preferense_file_key), Context.MODE_PRIVATE)
-        sf.edit().putString("token", token.data).apply()
     }
 
     private fun showMessage(message: String) {

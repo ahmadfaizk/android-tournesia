@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ui.auth.splash.SplashFragment">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/app_name" />
+        android:adjustViewBounds="true"
+        android:src="@drawable/tournesia_square"
+        android:contentDescription="@string/app_name" />
 
     <ProgressBar
         android:layout_width="wrap_content"

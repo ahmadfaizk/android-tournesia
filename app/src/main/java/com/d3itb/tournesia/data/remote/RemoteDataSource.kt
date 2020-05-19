@@ -8,6 +8,7 @@ import com.d3itb.tournesia.api.ApiClient
 import com.d3itb.tournesia.data.remote.response.AuthResponse
 import com.d3itb.tournesia.model.Token
 import com.d3itb.tournesia.model.User
+import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.vo.Resource
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,7 +16,7 @@ import retrofit2.Response
 
 class RemoteDataSource private constructor(private val context: Context){
     private val apiClient = ApiClient.instance
-    private var sharedPreferences = context.getSharedPreferences(context.getString(R.string.preferense_file_key), Context.MODE_PRIVATE)
+    private val token = TokenPreference.getInstance(context).getToken()
 
     companion object {
         private var instance: RemoteDataSource? = null
@@ -69,8 +70,6 @@ class RemoteDataSource private constructor(private val context: Context){
 
     fun getUser() : LiveData<Resource<User>> {
         val user = MutableLiveData<Resource<User>>()
-        user.value = Resource.loading(null)
-        val token = sharedPreferences.getString("token", null)
         apiClient.getUser("Bearer $token").enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 val error = response.body()?.error
