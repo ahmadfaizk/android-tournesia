@@ -1,65 +1,59 @@
-package com.d3itb.tournesia.ui.main.user
+package com.d3itb.tournesia.ui.main.home
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.d3itb.tournesia.R
-import com.d3itb.tournesia.ui.auth.StarterActivity
-import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
-import kotlinx.android.synthetic.main.fragment_user.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class UserFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private lateinit var viewModel: UserViewModel
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postAdapter = PostAdapter()
+        rv_posts.layoutManager = LinearLayoutManager(context)
+        rv_posts.adapter = postAdapter
+        rv_posts.setHasFixedSize(true)
 
-        viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[UserViewModel::class.java]
-
-        viewModel.getUser().observe(this.viewLifecycleOwner, Observer { user ->
-            if (user != null) {
-                when (user.status) {
+        viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[HomeViewModel::class.java]
+        viewModel.getListPost().observe(this.viewLifecycleOwner, Observer { data ->
+            if (data != null) {
+                when(data.status) {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        val data = user.data
-                        tv_name.text = data?.name
-                        tv_address.text = data?.address
-                        tv_email.text = data?.email
+                        data.data?.let { postAdapter.setListPost(it) }
                     }
                     Status.ERROR -> {
                         showLoading(false)
-                        showMessage(user.message.toString())
+                        showMessage(data.message.toString())
                     }
                 }
             }
         })
-
-        btn_logout.setOnClickListener {
-            TokenPreference.getInstance(requireContext()).removeToken()
-            this.startActivity(Intent(context, StarterActivity::class.java))
-            this.activity?.finish()
-        }
     }
 
     private fun showMessage(message: String) {

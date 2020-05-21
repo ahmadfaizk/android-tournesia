@@ -32,6 +32,7 @@ class SplashFragment : Fragment() {
                 view.findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
             } else {
                 view.findNavController().navigate(R.id.action_splashFragment_to_homeActivity)
+                this.activity?.finish()
             }
         }, 3000)
     }

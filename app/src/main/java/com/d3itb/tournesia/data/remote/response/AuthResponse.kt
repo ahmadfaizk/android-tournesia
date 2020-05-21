@@ -6,6 +6,6 @@ import com.d3itb.tournesia.model.User
 data class AuthResponse(
     var error: Boolean,
     var message: String,
-    var data: User,
-    var token: Token? = null
+    var errors_detail: User? = null,
+    var data: Token? = null
 )

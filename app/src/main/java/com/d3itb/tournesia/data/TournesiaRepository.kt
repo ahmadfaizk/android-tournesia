@@ -2,6 +2,7 @@ package com.d3itb.tournesia.data
 
 import androidx.lifecycle.LiveData
 import com.d3itb.tournesia.data.remote.RemoteDataSource
+import com.d3itb.tournesia.model.Post
 import com.d3itb.tournesia.model.Token
 import com.d3itb.tournesia.model.User
 import com.d3itb.tournesia.vo.Resource
@@ -22,5 +23,7 @@ class TournesiaRepository private constructor(private val remoteDataSource: Remo
 
     override fun getUser(): LiveData<Resource<User>> = remoteDataSource.getUser()
 
+    override fun getAllPost(): LiveData<Resource<List<Post>>> = remoteDataSource.getAllPost()
 
+    override fun getPostByMe(): LiveData<Resource<List<Post>>> = remoteDataSource.getAllPostByMe()
 }

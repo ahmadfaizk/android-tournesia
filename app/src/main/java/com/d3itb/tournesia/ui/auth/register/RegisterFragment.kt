@@ -78,8 +78,9 @@ class RegisterFragment : Fragment() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> if (token.data != null) {
                         showLoading(false)
-                        TokenPreference.getInstance(requireContext()).saveToken(token.data.data)
+                        TokenPreference.getInstance(requireContext()).saveToken(token.data.token)
                         view?.findNavController()?.navigate(R.id.action_registerFragment_to_homeActivity)
+                        this.activity?.finish()
                     }
                     Status.ERROR -> {
                         showLoading(false)

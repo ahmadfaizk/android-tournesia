@@ -1,9 +1,10 @@
 package com.d3itb.tournesia.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.d3itb.tournesia.R
 
-class TokenPreference (private val context: Context) {
+class TokenPreference (context: Context) {
     companion object {
         private var instance: TokenPreference? = null
 
@@ -21,6 +22,7 @@ class TokenPreference (private val context: Context) {
 
     fun getToken() : String? = sharedPreferences.getString("token", null)
 
+    @SuppressLint("CommitPrefEdits")
     fun removeToken() {
         sharedPreferences.edit().remove("token")
     }

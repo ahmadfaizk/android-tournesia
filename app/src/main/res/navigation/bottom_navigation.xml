@@ -7,9 +7,14 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.d3itb.tournesia.ui.HomeFragment"
+        android:name="com.d3itb.tournesia.ui.main.home.HomeFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_form"
+        android:name="com.d3itb.tournesia.ui.main.form.FormFragment"
+        android:label="@string/add"
+        tools:layout="@layout/fragment_form" />
     <fragment
         android:id="@+id/navigation_user"
         android:name="com.d3itb.tournesia.ui.main.user.UserFragment"
