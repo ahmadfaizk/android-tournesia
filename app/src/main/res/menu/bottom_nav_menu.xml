@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_home_outline_24dp"
         android:title="@string/home" />
     <item
-        android:id="@id/navigation_form"
+        android:id="@+id/navigation_add"
         android:icon="@drawable/ic_add_circle_outline_24dp"
         android:title="@string/add" />
     <item

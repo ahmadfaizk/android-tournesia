@@ -24,6 +24,6 @@ class TokenPreference (context: Context) {
 
     @SuppressLint("CommitPrefEdits")
     fun removeToken() {
-        sharedPreferences.edit().remove("token")
+        sharedPreferences.edit().remove("token").apply()
     }
 }
