@@ -10,4 +10,10 @@
     <string name="home">Home</string>
     <string name="user">User</string>
     <string name="add">Add</string>
+    <string name="nama_tempat">Nama Tempat</string>
+    <string name="kategori">Kategori</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="alamat">Alamat</string>
+    <string name="provinsi">Provinsi</string>
+    <string name="kabupaten_kota">Kabupaten/Kota</string>
 </resources>

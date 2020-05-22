@@ -4,12 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.d3itb.tournesia.api.ApiClient
-import com.d3itb.tournesia.data.remote.response.AuthResponse
-import com.d3itb.tournesia.data.remote.response.MultiResponse
-import com.d3itb.tournesia.data.remote.response.SingleResponse
-import com.d3itb.tournesia.model.Post
-import com.d3itb.tournesia.model.Token
-import com.d3itb.tournesia.model.User
+import com.d3itb.tournesia.data.remote.response.*
+import com.d3itb.tournesia.model.*
 import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.vo.Resource
 import retrofit2.Call
@@ -126,5 +122,53 @@ class RemoteDataSource private constructor(private val context: Context){
             }
         })
         return listPost
+    }
+
+    fun getListProvince(): LiveData<Resource<List<Province>>> {
+        val listProvince = MutableLiveData<Resource<List<Province>>>()
+        listProvince.value = Resource.loading(null)
+        ApiClient.placeInstance.getListProvince().enqueue(object : Callback<ProvinceResponse> {
+            override fun onResponse(call: Call<ProvinceResponse>, response: Response<ProvinceResponse>) {
+                val list = response.body()?.province
+                listProvince.value = Resource.success(list)
+            }
+
+            override fun onFailure(call: Call<ProvinceResponse>, t: Throwable) {
+                listProvince.value = Resource.error(t.message, null)
+            }
+        })
+        return listProvince
+    }
+
+    fun getListCity(idProvince: Int): LiveData<Resource<List<City>>> {
+        val cities = MutableLiveData<Resource<List<City>>>()
+        cities.value = Resource.loading(null)
+        ApiClient.placeInstance.getListCity(idProvince).enqueue(object : Callback<CityResponse> {
+            override fun onResponse(call: Call<CityResponse>, response: Response<CityResponse>) {
+                val list = response.body()?.city
+                cities.value = Resource.success(list)
+            }
+
+            override fun onFailure(call: Call<CityResponse>, t: Throwable) {
+                cities.value = Resource.error(t.message, null)
+            }
+        })
+        return cities
+    }
+
+    fun getCategory(): LiveData<Resource<List<Category>>> {
+        val category = MutableLiveData<Resource<List<Category>>>()
+        category.value = Resource.loading(null)
+        apiClient.getCategory("Bearer $token").enqueue(object : Callback<MultiResponse<Category>> {
+            override fun onResponse(call: Call<MultiResponse<Category>>, response: Response<MultiResponse<Category>>) {
+                val list = response.body()?.data
+                category.value = Resource.success(list)
+            }
+
+            override fun onFailure(call: Call<MultiResponse<Category>>, t: Throwable) {
+                category.value = Resource.error(t.message, null)
+            }
+        })
+        return category
     }
 }

@@ -3,6 +3,7 @@ package com.d3itb.tournesia.api
 import com.d3itb.tournesia.data.remote.response.AuthResponse
 import com.d3itb.tournesia.data.remote.response.MultiResponse
 import com.d3itb.tournesia.data.remote.response.SingleResponse
+import com.d3itb.tournesia.model.Category
 import com.d3itb.tournesia.model.Post
 import com.d3itb.tournesia.model.User
 import retrofit2.Call
@@ -29,4 +30,7 @@ interface Services {
 
     @GET("post")
     fun getPostByMe(@Header("Authorization") token: String): Call<MultiResponse<Post>>
+
+    @GET("category")
+    fun getCategory(@Header("Authorization") token: String): Call<MultiResponse<Category>>
 }
