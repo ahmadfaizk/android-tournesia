@@ -6,6 +6,8 @@ import com.d3itb.tournesia.data.remote.response.SingleResponse
 import com.d3itb.tournesia.model.Category
 import com.d3itb.tournesia.model.Post
 import com.d3itb.tournesia.model.User
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,4 +35,10 @@ interface Services {
 
     @GET("category")
     fun getCategory(@Header("Authorization") token: String): Call<MultiResponse<Category>>
+
+    @Multipart
+    @POST("post/add")
+    fun createPost(@Header("Authorization") token: String,
+                   @Part images: MultipartBody.Part,
+                   @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
 }

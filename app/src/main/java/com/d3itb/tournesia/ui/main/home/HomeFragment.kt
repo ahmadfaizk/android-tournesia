@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var postAdapter: PostAdapter
+    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +35,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         postAdapter = PostAdapter()
         rv_posts.layoutManager = LinearLayoutManager(context)
         rv_posts.adapter = postAdapter
         rv_posts.setHasFixedSize(true)
+        loadingDialog = AlertDialog.Builder(requireContext())
+            .setView(R.layout.dialog_loading)
+            .setCancelable(false)
+            .create()
 
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[HomeViewModel::class.java]
         viewModel.getListPost().observe(this.viewLifecycleOwner, Observer { data ->
@@ -62,8 +69,8 @@ class HomeFragment : Fragment() {
 
     private fun showLoading(state: Boolean) {
         if (state)
-            progress_bar.visibility = View.VISIBLE
+            loadingDialog.show()
         else
-            progress_bar.visibility = View.GONE
+            loadingDialog.dismiss()
     }
 }

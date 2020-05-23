@@ -8,6 +8,8 @@ import com.d3itb.tournesia.data.remote.response.*
 import com.d3itb.tournesia.model.*
 import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.vo.Resource
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -161,8 +163,7 @@ class RemoteDataSource private constructor(private val context: Context){
         category.value = Resource.loading(null)
         apiClient.getCategory("Bearer $token").enqueue(object : Callback<MultiResponse<Category>> {
             override fun onResponse(call: Call<MultiResponse<Category>>, response: Response<MultiResponse<Category>>) {
-                val list = response.body()?.data
-                category.value = Resource.success(list)
+                category.value = Resource.success(response.body()?.data)
             }
 
             override fun onFailure(call: Call<MultiResponse<Category>>, t: Throwable) {
@@ -170,5 +171,20 @@ class RemoteDataSource private constructor(private val context: Context){
             }
         })
         return category
+    }
+
+    fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>) : LiveData<Resource<Post>> {
+        val post = MutableLiveData<Resource<Post>>()
+        post.value = Resource.loading(null)
+        apiClient.createPost("Bearer $token", images, params).enqueue(object : Callback<SingleResponse<Post>> {
+            override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
+                post.value = Resource.success(response.body()?.data)
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
+                post.value = Resource.error(t.message, null)
+            }
+        })
+        return post
     }
 }

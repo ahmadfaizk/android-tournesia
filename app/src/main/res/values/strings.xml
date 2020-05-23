@@ -16,4 +16,11 @@
     <string name="alamat">Alamat</string>
     <string name="provinsi">Provinsi</string>
     <string name="kabupaten_kota">Kabupaten/Kota</string>
+    <string name="image_post">Image Post</string>
+    <string name="tambahkan">Tambahkan</string>
+    <string name="loading">Loading...</string>
+    <string-array name="arr_media">
+        <item>Kamera</item>
+        <item>Galeri</item>
+    </string-array>
 </resources>

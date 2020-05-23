@@ -3,6 +3,8 @@ package com.d3itb.tournesia.data
 import androidx.lifecycle.LiveData
 import com.d3itb.tournesia.model.*
 import com.d3itb.tournesia.vo.Resource
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 interface TournesiaDataSource {
 
@@ -21,4 +23,6 @@ interface TournesiaDataSource {
     fun getProvince(): LiveData<Resource<List<Province>>>
 
     fun getCity(id: Int): LiveData<Resource<List<City>>>
+
+    fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
 }
