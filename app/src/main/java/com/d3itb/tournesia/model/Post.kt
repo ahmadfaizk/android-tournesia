@@ -9,9 +9,15 @@ data class Post(
 
     var description: String,
 
+    @SerializedName("id_province")
+    var idProvince: Int,
+
     var province: String,
 
     var address: String,
+
+    @SerializedName("id_regency")
+    var idRegency: Int,
 
     var regency: String,
 
@@ -19,6 +25,9 @@ data class Post(
 
     @SerializedName("votes_count")
     var votesCount: Int,
+
+    @SerializedName("id_category")
+    var idCategory: Int,
 
     var category: String,
 

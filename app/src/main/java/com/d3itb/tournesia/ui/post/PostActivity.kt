@@ -1,5 +1,6 @@
 package com.d3itb.tournesia.ui.post
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.api.ApiClient
 import com.d3itb.tournesia.model.Post
+import com.d3itb.tournesia.ui.main.form.FormActivity
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.activity_post.*
@@ -22,6 +24,7 @@ class PostActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: PostViewModel
+    private var postId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +34,8 @@ class PostActivity : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            val id = extras.getInt(EXTRA_ID)
-            viewModel.setPost(id)
+            postId = extras.getInt(EXTRA_ID)
+            viewModel.setPost(postId)
             viewModel.post.observe(this, Observer { post ->
                 if (post != null) {
                     when (post.status) {
@@ -42,6 +45,11 @@ class PostActivity : AppCompatActivity() {
                     }
                 }
             })
+        }
+        btn_edit.setOnClickListener {
+            val intent = Intent(this, FormActivity::class.java)
+            intent.putExtra(FormActivity.EXTRA_ID, postId)
+            startActivity(intent)
         }
     }
 

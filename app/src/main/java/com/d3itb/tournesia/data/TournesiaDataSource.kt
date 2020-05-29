@@ -27,4 +27,6 @@ interface TournesiaDataSource {
     fun getCity(id: Int): LiveData<Resource<List<Regency>>>
 
     fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
+
+    fun updatePost(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
 }

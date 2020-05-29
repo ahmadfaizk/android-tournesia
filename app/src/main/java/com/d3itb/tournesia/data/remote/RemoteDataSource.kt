@@ -215,4 +215,19 @@ class RemoteDataSource private constructor(private val context: Context){
         })
         return post
     }
+
+    fun updatePost(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>) : LiveData<Resource<Post>> {
+        val post = MutableLiveData<Resource<Post>>()
+        post.value = Resource.loading(null)
+        apiClient.updatePost("Bearer $token", idPost, images, params).enqueue(object : Callback<SingleResponse<Post>> {
+            override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
+                post.value = Resource.success(response.body()?.data)
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
+                post.value = Resource.error(t.message, null)
+            }
+        })
+        return post
+    }
 }

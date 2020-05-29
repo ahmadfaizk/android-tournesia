@@ -44,6 +44,13 @@ interface Services {
                    @Part images: MultipartBody.Part,
                    @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
 
+    @Multipart
+    @POST("post/{id}/update")
+    fun updatePost(@Header("Authorization") token: String,
+               @Path("id") idPost: Int,
+               @Part images: MultipartBody.Part?,
+               @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
+
     @GET("province")
     fun getProvinces(): Call<MultiResponse<Province>>
 

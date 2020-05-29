@@ -16,9 +16,14 @@ import okhttp3.RequestBody
 class FormViewModel(private val tournesiaRepository: TournesiaRepository): ViewModel() {
 
     private var provinceId = MutableLiveData<Int>()
+    private var postId = MutableLiveData<Int>()
 
     fun setProvinceId(id: Int) {
         provinceId.value = id
+    }
+
+    fun setPostId(id: Int) {
+        postId.value = id
     }
 
     var category: LiveData<Resource<List<Category>>> = tournesiaRepository.getCategory()
@@ -29,5 +34,11 @@ class FormViewModel(private val tournesiaRepository: TournesiaRepository): ViewM
         tournesiaRepository.getCity(provinceId)
     }
 
+    var post: LiveData<Resource<Post>> = Transformations.switchMap(postId) { id ->
+        tournesiaRepository.getPostById(id)
+    }
+
     fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>): LiveData<Resource<Post>> = tournesiaRepository.createPost(images, params)
+
+    fun updatePost(images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Post>> = tournesiaRepository.updatePost(postId.value!!, images, params)
 }

@@ -41,4 +41,12 @@ class TournesiaRepository private constructor(private val remoteDataSource: Remo
     ): LiveData<Resource<Post>> {
         return remoteDataSource.createPost(images, params)
     }
+
+    override fun updatePost(
+        idPost: Int,
+        images: MultipartBody.Part?,
+        params: HashMap<String, RequestBody>
+    ): LiveData<Resource<Post>> {
+        return remoteDataSource.updatePost(idPost, images, params)
+    }
 }
