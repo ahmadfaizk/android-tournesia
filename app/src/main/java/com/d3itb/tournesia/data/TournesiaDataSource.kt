@@ -18,11 +18,13 @@ interface TournesiaDataSource {
 
     fun getPostByMe(): LiveData<Resource<List<Post>>>
 
+    fun getPostById(id: Int): LiveData<Resource<Post>>
+
     fun getCategory(): LiveData<Resource<List<Category>>>
 
     fun getProvince(): LiveData<Resource<List<Province>>>
 
-    fun getCity(id: Int): LiveData<Resource<List<City>>>
+    fun getCity(id: Int): LiveData<Resource<List<Regency>>>
 
     fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
 }

@@ -1,5 +1,6 @@
 package com.d3itb.tournesia.ui.main.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.d3itb.tournesia.R
+import com.d3itb.tournesia.model.Post
+import com.d3itb.tournesia.ui.post.PostActivity
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -59,6 +62,13 @@ class HomeFragment : Fragment() {
                         showMessage(data.message.toString())
                     }
                 }
+            }
+        })
+        postAdapter.setOnClickListener(object : PostAdapter.OnClickListener {
+            override fun onCLick(post: Post) {
+                val intent = Intent(context, PostActivity::class.java)
+                intent.putExtra(PostActivity.EXTRA_ID, post.id)
+                startActivity(intent)
             }
         })
     }

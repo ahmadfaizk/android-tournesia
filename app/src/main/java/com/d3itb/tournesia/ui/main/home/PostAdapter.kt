@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.d3itb.tournesia.R
+import com.d3itb.tournesia.api.ApiClient
 import com.d3itb.tournesia.model.Post
-import com.d3itb.tournesia.utils.ImageUtils
 import kotlinx.android.synthetic.main.item_post.view.*
 
 class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     private val listPost = ArrayList<Post>()
+    private var onClickListener: OnClickListener? = null
 
     fun setListPost(listPost: List<Post>) {
         if (this.listPost.isNotEmpty()) {
@@ -20,6 +21,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
         }
         this.listPost.addAll(listPost)
         notifyDataSetChanged()
+    }
+
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,6 +36,9 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(listPost[position])
+        holder.itemView.setOnClickListener {
+            onClickListener?.onCLick(listPost[position])
+        }
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -38,11 +46,15 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
             with(itemView) {
                 tv_name.text = post.name
                 tv_description.text = post.description
-                tv_address.text = "${post.city}, ${post.province}"
+                tv_address.text = "${post.regency}, ${post.province}"
                 Glide.with(itemView)
-                    .load(ImageUtils.getImagePostUrl(post.images[0].name))
+                    .load(ApiClient.getImagePostUrl(post.images[0].name))
                     .into(img_post)
             }
         }
+    }
+
+    interface OnClickListener {
+        fun onCLick(post: Post)
     }
 }

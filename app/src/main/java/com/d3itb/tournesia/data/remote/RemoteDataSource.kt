@@ -50,7 +50,7 @@ class RemoteDataSource private constructor(private val context: Context){
     fun register(user: User): LiveData<Resource<Token>> {
         val token = MutableLiveData<Resource<Token>>()
         token.value = Resource.loading(null)
-        apiClient.register(user.name, user.email, user.address, user.password!!)
+        apiClient.register(user.name, user.email, user.password!!, user.address)
             .enqueue(object : Callback<AuthResponse> {
                 override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                     val error = response.body()?.error
@@ -126,32 +126,60 @@ class RemoteDataSource private constructor(private val context: Context){
         return listPost
     }
 
+    fun getPostById(id: Int): LiveData<Resource<Post>> {
+        val post = MutableLiveData<Resource<Post>>()
+        post.value = Resource.loading(null)
+        apiClient.getPostById("Bearer $token", id).enqueue(object : Callback<SingleResponse<Post>> {
+            override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    post.value = Resource.success(response.body()?.data)
+                } else {
+                    post.value = Resource.error(response.body()?.message, null)
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
+                post.value = Resource.error(t.message, null)
+            }
+        })
+        return post
+    }
+
     fun getListProvince(): LiveData<Resource<List<Province>>> {
         val listProvince = MutableLiveData<Resource<List<Province>>>()
         listProvince.value = Resource.loading(null)
-        ApiClient.placeInstance.getListProvince().enqueue(object : Callback<ProvinceResponse> {
-            override fun onResponse(call: Call<ProvinceResponse>, response: Response<ProvinceResponse>) {
-                val list = response.body()?.province
-                listProvince.value = Resource.success(list)
+        apiClient.getProvinces().enqueue(object : Callback<MultiResponse<Province>> {
+            override fun onResponse(call: Call<MultiResponse<Province>>, response: Response<MultiResponse<Province>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    listProvince.value = Resource.success(response.body()?.data)
+                } else {
+                    listProvince.value = Resource.error(response.body()?.message, null)
+                }
             }
 
-            override fun onFailure(call: Call<ProvinceResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MultiResponse<Province>>, t: Throwable) {
                 listProvince.value = Resource.error(t.message, null)
             }
         })
         return listProvince
     }
 
-    fun getListCity(idProvince: Int): LiveData<Resource<List<City>>> {
-        val cities = MutableLiveData<Resource<List<City>>>()
+    fun getListCity(idProvince: Int): LiveData<Resource<List<Regency>>> {
+        val cities = MutableLiveData<Resource<List<Regency>>>()
         cities.value = Resource.loading(null)
-        ApiClient.placeInstance.getListCity(idProvince).enqueue(object : Callback<CityResponse> {
-            override fun onResponse(call: Call<CityResponse>, response: Response<CityResponse>) {
-                val list = response.body()?.city
-                cities.value = Resource.success(list)
+        apiClient.getRegencies(idProvince).enqueue(object : Callback<MultiResponse<Regency>> {
+            override fun onResponse(call: Call<MultiResponse<Regency>>, response: Response<MultiResponse<Regency>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    cities.value = Resource.success(response.body()?.data)
+                } else {
+                    cities.value = Resource.error(response.body()?.message, null)
+                }
             }
 
-            override fun onFailure(call: Call<CityResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MultiResponse<Regency>>, t: Throwable) {
                 cities.value = Resource.error(t.message, null)
             }
         })

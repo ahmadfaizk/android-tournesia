@@ -2,11 +2,11 @@ package com.d3itb.tournesia.model
 
 import com.google.gson.annotations.SerializedName
 
-data class City(
+data class Regency(
     var id: Int,
-    @SerializedName("id_provinsi")
+    @SerializedName("id_province")
     var idProvince: String,
-    @SerializedName("nama")
+
     var name: String
 ) {
     override fun toString(): String {

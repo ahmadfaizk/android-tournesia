@@ -11,7 +11,9 @@ data class Post(
 
     var province: String,
 
-    var city: String,
+    var address: String,
+
+    var regency: String,
 
     var votes: Float,
 

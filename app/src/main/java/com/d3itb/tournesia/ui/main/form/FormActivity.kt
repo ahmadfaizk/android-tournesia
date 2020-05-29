@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -18,7 +19,7 @@ import androidx.loader.content.CursorLoader
 import com.bumptech.glide.Glide
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.model.Category
-import com.d3itb.tournesia.model.City
+import com.d3itb.tournesia.model.Regency
 import com.d3itb.tournesia.model.Province
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
@@ -27,7 +28,6 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -36,12 +36,14 @@ class FormActivity : AppCompatActivity() {
 
     private lateinit var categoryAdapter: ArrayAdapter<Category>
     private lateinit var provinceAdapter: ArrayAdapter<Province>
-    private lateinit var cityAdapter: ArrayAdapter<City>
+    private lateinit var regencyAdapter: ArrayAdapter<Regency>
     private lateinit var viewModel: FormViewModel
     private lateinit var loadingDialog: AlertDialog
 
     private var currentPhotoPath: String? = null
     private var categoryId = 0
+    private var provinceId = 0
+    private var regencyId = 0
 
     companion object {
         const val REQUEST_IMAGE_CAMERA = 1
@@ -51,10 +53,11 @@ class FormActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+        supportActionBar?.title = "Add New Post"
 
         categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
         provinceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
-        cityAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
+        regencyAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(this))[FormViewModel::class.java]
         loadingDialog = AlertDialog.Builder(this)
             .setView(R.layout.dialog_loading)
@@ -62,15 +65,16 @@ class FormActivity : AppCompatActivity() {
             .create()
 
         act_category.setAdapter(categoryAdapter)
-        act_city.setAdapter(cityAdapter)
+        act_city.setAdapter(regencyAdapter)
         act_province.setAdapter(provinceAdapter)
 
         act_province.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
-                cityAdapter.clear()
+                regencyAdapter.clear()
                 act_city.clearListSelection()
                 val id = provinceAdapter.getItem(position)?.id
                 if (id != null) {
+                    provinceId = id
                     viewModel.setProvinceId(id)
                 }
             }
@@ -79,6 +83,13 @@ class FormActivity : AppCompatActivity() {
                 val id = categoryAdapter.getItem(position)?.id
                 if (id != null) {
                     categoryId = id
+                }
+            }
+        act_city.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                val id = regencyAdapter.getItem(position)?.id
+                if (id != null) {
+                    regencyId = id
                 }
             }
         img_post.setOnClickListener {
@@ -126,7 +137,7 @@ class FormActivity : AppCompatActivity() {
                 }
             }
         })
-        viewModel.city.observe(this, Observer { response ->
+        viewModel.regency.observe(this, Observer { response ->
             if (response != null) {
                 when(response.status) {
                     Status.LOADING -> showLoading(true)
@@ -134,7 +145,7 @@ class FormActivity : AppCompatActivity() {
                         showLoading(false)
                         val cities = response.data
                         if (cities != null) {
-                            cityAdapter.addAll(cities)
+                            regencyAdapter.addAll(cities)
                         }
                     }
                     Status.ERROR -> {
@@ -250,8 +261,8 @@ class FormActivity : AppCompatActivity() {
         params["id_category"] = createPartFromString(categoryId.toString())
         params["address"] = createPartFromString(edt_address.text.toString())
         params["description"] = createPartFromString(edt_description.text.toString())
-        params["province"] = createPartFromString(act_province.text.toString())
-        params["city"] = createPartFromString(act_city.text.toString())
+        params["id_province"] = createPartFromString(provinceId.toString())
+        params["id_regency"] = createPartFromString(regencyId.toString())
         viewModel.createPost(images, params).observe(this, Observer { response ->
             if (response != null) {
                 when(response.status) {
