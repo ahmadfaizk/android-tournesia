@@ -221,7 +221,12 @@ class RemoteDataSource private constructor(private val context: Context){
         post.value = Resource.loading(null)
         apiClient.updatePost("Bearer $token", idPost, images, params).enqueue(object : Callback<SingleResponse<Post>> {
             override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
-                post.value = Resource.success(response.body()?.data)
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    post.value = Resource.success(response.body()?.data)
+                } else {
+                    post.value = Resource.error(response.body()?.message, null)
+                }
             }
 
             override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
@@ -229,5 +234,89 @@ class RemoteDataSource private constructor(private val context: Context){
             }
         })
         return post
+    }
+
+    fun deletePost(idPost: Int): LiveData<Resource<Post>> {
+        val post = MutableLiveData<Resource<Post>>()
+        post.value = Resource.loading(null)
+        apiClient.deletePost("Bearer $token", idPost).enqueue(object : Callback<SingleResponse<Post>> {
+            override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    post.value = Resource.success(response.body()?.data)
+                } else {
+                    post.value = Resource.error(response.body()?.message, null)
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
+                post.value = Resource.error(t.message, null)
+            }
+        })
+        return post
+    }
+
+    fun createComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>> {
+        val comment = MutableLiveData<Resource<Comment>>()
+        comment.value = Resource.loading(null)
+        apiClient.createComment("Bearer $token", idPost, images, params).enqueue(object : Callback<SingleResponse<Comment>> {
+            override fun onResponse(call: Call<SingleResponse<Comment>>, response: Response<SingleResponse<Comment>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    comment.value = Resource.success(response.body()?.data)
+                } else {
+                    comment.value = Resource.error(response.body()?.message, null)
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Comment>>, t: Throwable) {
+                comment.value = Resource.error(t.message, null)
+            }
+        })
+        return comment
+    }
+
+    fun updateComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>> {
+        val comment = MutableLiveData<Resource<Comment>>()
+        comment.value = Resource.loading(null)
+        apiClient.updateComment("Bearer $token", idPost, images, params).enqueue(object : Callback<SingleResponse<Comment>> {
+            override fun onResponse(call: Call<SingleResponse<Comment>>, response: Response<SingleResponse<Comment>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    comment.value = Resource.success(response.body()?.data)
+                } else {
+                    comment.value = Resource.error(response.body()?.message, null)
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Comment>>, t: Throwable) {
+                comment.value = Resource.error(t.message, null)
+            }
+        })
+        return comment
+    }
+
+    fun deleteComment(idPost: Int) : LiveData<Resource<Comment>> {
+        val comment = MutableLiveData<Resource<Comment>>()
+        comment.value = Resource.loading(null)
+        apiClient.deleteComment("Bearer $token", idPost)
+            .enqueue(object : Callback<SingleResponse<Comment>> {
+                override fun onResponse(
+                    call: Call<SingleResponse<Comment>>,
+                    response: Response<SingleResponse<Comment>>
+                ) {
+                    val error = response.body()?.error
+                    if (error != null && !error) {
+                        comment.value = Resource.success(response.body()?.data)
+                    } else {
+                        comment.value = Resource.error(response.body()?.message, null)
+                    }
+                }
+
+                override fun onFailure(call: Call<SingleResponse<Comment>>, t: Throwable) {
+                    comment.value = Resource.error(t.message, null)
+                }
+            })
+        return comment
     }
 }

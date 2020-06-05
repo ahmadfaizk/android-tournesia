@@ -47,9 +47,31 @@ interface Services {
     @Multipart
     @POST("post/{id}/update")
     fun updatePost(@Header("Authorization") token: String,
-               @Path("id") idPost: Int,
-               @Part images: MultipartBody.Part?,
-               @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
+                   @Path("id") idPost: Int,
+                   @Part images: MultipartBody.Part?,
+                   @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
+
+    @Multipart
+    @POST("post/{id}/comment/add")
+    fun createComment(@Header("Authorization") token: String,
+                      @Path("id") idPost: Int,
+                      @Part images: MultipartBody.Part?,
+                      @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Comment>>
+
+    @Multipart
+    @POST("post/{id}/comment/update")
+    fun updateComment(@Header("Authorization") token: String,
+                      @Path("id") idPost: Int,
+                      @Part images: MultipartBody.Part?,
+                      @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Comment>>
+
+    @GET("post/{id}/comment/delete")
+    fun deleteComment(@Header("Authorization") token: String,
+                      @Path("id") idPost: Int): Call<SingleResponse<Comment>>
+
+    @GET("post/{id}/delete")
+    fun deletePost(@Header("Authorization") token: String,
+                   @Path("id") idPost: Int): Call<SingleResponse<Post>>
 
     @GET("province")
     fun getProvinces(): Call<MultiResponse<Province>>

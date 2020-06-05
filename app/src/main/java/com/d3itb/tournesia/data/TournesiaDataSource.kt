@@ -29,4 +29,12 @@ interface TournesiaDataSource {
     fun createPost(images: MultipartBody.Part, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
 
     fun updatePost(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Post>>
+
+    fun deletePost(idPost: Int): LiveData<Resource<Post>>
+
+    fun createComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>>
+
+    fun updateComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>>
+
+    fun deleteComment(idPost: Int): LiveData<Resource<Comment>>
 }

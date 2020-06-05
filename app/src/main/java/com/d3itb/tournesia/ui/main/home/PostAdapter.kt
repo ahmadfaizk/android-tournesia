@@ -45,7 +45,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
         fun bind(post: Post) {
             with(itemView) {
                 tv_name.text = post.name
-                tv_description.text = post.description
+                tv_votes.text = post.votes.toString()
                 tv_address.text = "${post.regency}, ${post.province}"
                 Glide.with(itemView)
                     .load(ApiClient.getImagePostUrl(post.images[0].name))

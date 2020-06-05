@@ -49,4 +49,24 @@ class TournesiaRepository private constructor(private val remoteDataSource: Remo
     ): LiveData<Resource<Post>> {
         return remoteDataSource.updatePost(idPost, images, params)
     }
+
+    override fun deletePost(idPost: Int): LiveData<Resource<Post>> = remoteDataSource.deletePost(idPost)
+
+    override fun createComment(
+        idPost: Int,
+        images: MultipartBody.Part?,
+        params: HashMap<String, RequestBody>
+    ): LiveData<Resource<Comment>> {
+        return remoteDataSource.createComment(idPost, images, params)
+    }
+
+    override fun updateComment(
+        idPost: Int,
+        images: MultipartBody.Part?,
+        params: HashMap<String, RequestBody>
+    ): LiveData<Resource<Comment>> {
+        return remoteDataSource.updateComment(idPost, images, params)
+    }
+
+    override fun deleteComment(idPost: Int): LiveData<Resource<Comment>> = remoteDataSource.deleteComment(idPost)
 }

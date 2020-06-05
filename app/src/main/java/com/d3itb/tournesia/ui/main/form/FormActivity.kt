@@ -53,6 +53,11 @@ class FormActivity : AppCompatActivity() {
         const val EXTRA_ID = "extra_id"
         const val REQUEST_IMAGE_CAMERA = 1
         const val REQUEST_IMAGE_MEDIA = 2
+
+        const val REQUEST_ADD = 101
+        const val REQUEST_UPDATE = 102
+        const val RESULT_ADD = 201
+        const val RESULT_UPDATE = 202
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,6 +176,7 @@ class FormActivity : AppCompatActivity() {
             viewModel.setPostId(id)
             getPostData()
             supportActionBar?.title = "Edit Post"
+            btn_add.text = "Update"
         }
     }
 
@@ -321,7 +327,8 @@ class FormActivity : AppCompatActivity() {
                     Status.SUCCESS -> {
                         showLoading(false)
                         showMessage("Sukses Create Post")
-                        clearForm()
+                        setResult(RESULT_ADD)
+                        finish()
                     }
                     Status.ERROR -> {
                         showLoading(false)
@@ -352,7 +359,7 @@ class FormActivity : AppCompatActivity() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        showMessage("Sukses Update Post")
+                        setResult(RESULT_UPDATE)
                         finish()
                     }
                     Status.ERROR -> {

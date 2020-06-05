@@ -38,7 +38,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/nama_tempat"
-            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +57,6 @@
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="Lokasi"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_votes" />
@@ -71,7 +69,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/kategori"
-            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
@@ -94,7 +91,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/deskripsi"
-            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_author" />
@@ -109,7 +105,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="TextView"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_description_title" />
@@ -126,7 +121,6 @@
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="4.5/5"
-            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_category" />
 
@@ -138,7 +132,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:text="Region"
-            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
@@ -147,30 +140,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button2" />
+            app:layout_constraintTop_toTopOf="@+id/btn_delete" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintEnd_toStartOf="@+id/btn_comment"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_edit"
-            app:layout_constraintTop_toTopOf="@+id/button3" />
+            app:layout_constraintTop_toTopOf="@+id/btn_comment" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Add Comment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button2"
+            app:layout_constraintStart_toEndOf="@+id/btn_delete"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -18,4 +18,6 @@ class PostViewModel(private val tournesiaRepository: TournesiaRepository): ViewM
     var post: LiveData<Resource<Post>> = Transformations.switchMap(postId) { id ->
         tournesiaRepository.getPostById(id)
     }
+
+    fun deletePost() : LiveData<Resource<Post>>? = postId.value?.let { tournesiaRepository.deletePost(it) }
 }
