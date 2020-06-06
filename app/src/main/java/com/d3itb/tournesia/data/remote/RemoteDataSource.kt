@@ -206,7 +206,12 @@ class RemoteDataSource private constructor(private val context: Context){
         post.value = Resource.loading(null)
         apiClient.createPost("Bearer $token", images, params).enqueue(object : Callback<SingleResponse<Post>> {
             override fun onResponse(call: Call<SingleResponse<Post>>, response: Response<SingleResponse<Post>>) {
-                post.value = Resource.success(response.body()?.data)
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    post.value = Resource.success(response.body()?.data)
+                } else {
+                    post.value = Resource.error("${response.body()?.message}\n${response.body()?.errors_detail?.joinToString("\n")}", null)
+                }
             }
 
             override fun onFailure(call: Call<SingleResponse<Post>>, t: Throwable) {
@@ -265,7 +270,7 @@ class RemoteDataSource private constructor(private val context: Context){
                 if (error != null && !error) {
                     comment.value = Resource.success(response.body()?.data)
                 } else {
-                    comment.value = Resource.error(response.body()?.message, null)
+                    comment.value = Resource.error("${response.body()?.message}\n${response.body()?.errors_detail?.joinToString("\n")}", null)
                 }
             }
 
@@ -301,10 +306,7 @@ class RemoteDataSource private constructor(private val context: Context){
         comment.value = Resource.loading(null)
         apiClient.deleteComment("Bearer $token", idPost)
             .enqueue(object : Callback<SingleResponse<Comment>> {
-                override fun onResponse(
-                    call: Call<SingleResponse<Comment>>,
-                    response: Response<SingleResponse<Comment>>
-                ) {
+                override fun onResponse(call: Call<SingleResponse<Comment>>, response: Response<SingleResponse<Comment>>) {
                     val error = response.body()?.error
                     if (error != null && !error) {
                         comment.value = Resource.success(response.body()?.data)

@@ -7,6 +7,7 @@ import com.d3itb.tournesia.data.TournesiaRepository
 import com.d3itb.tournesia.di.Injection
 import com.d3itb.tournesia.ui.auth.login.LoginViewModel
 import com.d3itb.tournesia.ui.auth.register.RegisterViewModel
+import com.d3itb.tournesia.ui.comment.AddCommentViewModel
 import com.d3itb.tournesia.ui.main.form.FormViewModel
 import com.d3itb.tournesia.ui.main.home.HomeViewModel
 import com.d3itb.tournesia.ui.main.user.UserViewModel
@@ -41,6 +42,9 @@ class ViewModelFactory private constructor(private val tournesiaRepository: Tour
             }
             modelClass.isAssignableFrom(PostViewModel::class.java) -> {
                 PostViewModel(tournesiaRepository) as T
+            }
+            modelClass.isAssignableFrom(AddCommentViewModel::class.java) -> {
+                AddCommentViewModel(tournesiaRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class : " + modelClass.name)
         }
