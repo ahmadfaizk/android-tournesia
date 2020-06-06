@@ -261,6 +261,46 @@ class RemoteDataSource private constructor(private val context: Context){
         return post
     }
 
+    fun getAllComment(idPost: Int) : LiveData<Resource<List<Comment>>> {
+        val comments = MutableLiveData<Resource<List<Comment>>>()
+        comments.value = Resource.loading(null)
+        apiClient.getAllCommentByIdPost("Bearer $token", idPost).enqueue(object : Callback<MultiResponse<Comment>> {
+            override fun onResponse(call: Call<MultiResponse<Comment>>, response: Response<MultiResponse<Comment>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    comments.value = Resource.success(response.body()?.data)
+                } else {
+                    comments.value = Resource.error("${response.body()?.message}\n${response.body()?.errors_detail?.joinToString("\n")}", null)
+                }
+            }
+
+            override fun onFailure(call: Call<MultiResponse<Comment>>, t: Throwable) {
+                comments.value = Resource.error(t.message, null)
+            }
+        })
+        return comments
+    }
+
+    fun getMyComment(idPost: Int) : LiveData<Resource<Comment>> {
+        val comment = MutableLiveData<Resource<Comment>>()
+        comment.value = Resource.loading(null)
+        apiClient.getMyCommentByIdPost("Bearer $token", idPost).enqueue(object : Callback<SingleResponse<Comment>> {
+            override fun onResponse(call: Call<SingleResponse<Comment>>, response: Response<SingleResponse<Comment>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    comment.value = Resource.success(response.body()?.data)
+                } else {
+                    comment.value = Resource.error("${response.body()?.message}\n${response.body()?.errors_detail?.joinToString("\n")}", null)
+                }
+            }
+
+            override fun onFailure(call: Call<SingleResponse<Comment>>, t: Throwable) {
+                comment.value = Resource.error(t.message, null)
+            }
+        })
+        return comment
+    }
+
     fun createComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>> {
         val comment = MutableLiveData<Resource<Comment>>()
         comment.value = Resource.loading(null)

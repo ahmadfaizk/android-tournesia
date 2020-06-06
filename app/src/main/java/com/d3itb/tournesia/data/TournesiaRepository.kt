@@ -52,6 +52,10 @@ class TournesiaRepository private constructor(private val remoteDataSource: Remo
 
     override fun deletePost(idPost: Int): LiveData<Resource<Post>> = remoteDataSource.deletePost(idPost)
 
+    override fun getAllComment(idPost: Int): LiveData<Resource<List<Comment>>> = remoteDataSource.getAllComment(idPost)
+
+    override fun getMyComment(idPost: Int): LiveData<Resource<Comment>> = remoteDataSource.getMyComment(idPost)
+
     override fun createComment(
         idPost: Int,
         images: MultipartBody.Part?,

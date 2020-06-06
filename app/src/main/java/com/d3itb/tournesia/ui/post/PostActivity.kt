@@ -2,16 +2,18 @@ package com.d3itb.tournesia.ui.post
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.api.ApiClient
+import com.d3itb.tournesia.model.Comment
 import com.d3itb.tournesia.model.Post
-import com.d3itb.tournesia.ui.auth.StarterActivity
 import com.d3itb.tournesia.ui.comment.AddCommentActivity
 import com.d3itb.tournesia.ui.main.form.FormActivity
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
@@ -25,13 +27,18 @@ class PostActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: PostViewModel
+    private lateinit var commentAdapter: CommentAdapter
     private var postId = 0
+    private var isComment = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
 
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(this))[PostViewModel::class.java]
+        commentAdapter = CommentAdapter()
+        rv_comment.layoutManager = LinearLayoutManager(this)
+        rv_comment.adapter = commentAdapter
 
         val extras = intent.extras
         if (extras != null) {
@@ -48,7 +55,10 @@ class PostActivity : AppCompatActivity() {
             showDialogDelete()
         }
         btn_comment.setOnClickListener {
-            startActivity(Intent(this, AddCommentActivity::class.java))
+            val comment = Intent(this, AddCommentActivity::class.java)
+            comment.putExtra(AddCommentActivity.EXTRA_ID, postId)
+            comment.putExtra(AddCommentActivity.EXTRA_EDIT, isComment)
+            startActivity(comment)
         }
     }
 
@@ -56,8 +66,26 @@ class PostActivity : AppCompatActivity() {
         viewModel.post.observe(this, Observer { post ->
             if (post != null) {
                 when (post.status) {
+                    Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
+                        showLoading(false)
                         post.data?.let { populateData(it) }
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        showMessage(post.message.toString())
+                    }
+                }
+            }
+        })
+        viewModel.comment.observe(this, Observer { response ->
+            if (response != null) {
+                when(response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let { commentAdapter.addComments(it) }
+                    }
+                    Status.ERROR -> {
+                        showMessage(response.message.toString())
                     }
                 }
             }
@@ -76,6 +104,12 @@ class PostActivity : AppCompatActivity() {
         tv_votes.text = post.votes.toString()
         tv_description.text = post.description
         tv_author.text = "Diupload Oleh ${post.userName}"
+        if (post.isComment != null) {
+            btn_comment.text = "Edit Comment"
+            isComment = true
+        } else {
+            btn_comment.text = "Add Comment"
+        }
     }
 
     private fun showDialogDelete() {
@@ -101,13 +135,29 @@ class PostActivity : AppCompatActivity() {
         viewModel.deletePost()?.observe(this, Observer { response ->
             if (response != null) {
                 when (response.status) {
+                    Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
+                        showLoading(false)
                         showMessage("Suskes Menghapus Tempat Ini.")
                         finish()
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        showMessage(response.message.toString())
                     }
                 }
             }
         })
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            progress_bar.visibility = View.VISIBLE
+            container.visibility = View.GONE
+        } else {
+            progress_bar.visibility = View.GONE
+            container.visibility = View.VISIBLE
+        }
     }
 
     private fun showMessage(message: String) {

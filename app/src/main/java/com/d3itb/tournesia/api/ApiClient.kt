@@ -22,4 +22,6 @@ object ApiClient {
         .create(Services::class.java)
 
     fun getImagePostUrl(name: String) = "$BASE_URL/posts/$name"
+
+    fun getImageCommentUrl(name: String) = "$BASE_URL/comments/$name"
 }

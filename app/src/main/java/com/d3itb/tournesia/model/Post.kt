@@ -40,5 +40,8 @@ data class Post(
     @SerializedName("created_at")
     var createdAt: String,
 
+    @SerializedName("is_comment")
+    var isComment: Boolean?,
+
     var images: List<Image>
 )

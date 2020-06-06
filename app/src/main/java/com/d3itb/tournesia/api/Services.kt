@@ -51,6 +51,14 @@ interface Services {
                    @Part images: MultipartBody.Part?,
                    @PartMap params: HashMap<String, RequestBody>): Call<SingleResponse<Post>>
 
+    @GET("post/{id}/comment/all")
+    fun getAllCommentByIdPost(@Header("Authorization") token: String,
+                           @Path("id") idPost: Int): Call<MultiResponse<Comment>>
+
+    @GET("post/{id}/comment")
+    fun getMyCommentByIdPost(@Header("Authorization") token: String,
+                              @Path("id") idPost: Int): Call<SingleResponse<Comment>>
+
     @Multipart
     @POST("post/{id}/comment/add")
     fun createComment(@Header("Authorization") token: String,

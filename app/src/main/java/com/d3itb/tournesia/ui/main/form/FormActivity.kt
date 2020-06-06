@@ -26,10 +26,12 @@ import com.d3itb.tournesia.model.Province
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.activity_form.*
+import kotlinx.android.synthetic.main.activity_form.container
+import kotlinx.android.synthetic.main.activity_form.img_post
+import kotlinx.android.synthetic.main.activity_form.progress_bar
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Multipart
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,7 +43,6 @@ class FormActivity : AppCompatActivity() {
     private lateinit var provinceAdapter: ArrayAdapter<Province>
     private lateinit var regencyAdapter: ArrayAdapter<Regency>
     private lateinit var viewModel: FormViewModel
-    private lateinit var loadingDialog: AlertDialog
 
     private var currentPhotoPath: String? = null
     private var categoryId = 0
@@ -69,10 +70,6 @@ class FormActivity : AppCompatActivity() {
         provinceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
         regencyAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item)
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(this))[FormViewModel::class.java]
-        loadingDialog = AlertDialog.Builder(this)
-            .setView(R.layout.dialog_loading)
-            .setCancelable(false)
-            .create()
 
         act_category.setAdapter(categoryAdapter)
         act_city.setAdapter(regencyAdapter)
@@ -194,19 +191,6 @@ class FormActivity : AppCompatActivity() {
             ready = false
         }
         return ready
-    }
-
-    private fun clearForm() {
-        currentPhotoPath = null
-        Glide.with(this)
-            .load(R.drawable.ic_image_outline_48dp)
-            .into(img_post)
-        edt_name.text?.clear()
-        edt_address.text?.clear()
-        edt_description.text?.clear()
-        act_category.text.clear()
-        act_province.text.clear()
-        act_city.text.clear()
     }
 
     private fun getPostData() {
@@ -388,9 +372,11 @@ class FormActivity : AppCompatActivity() {
 
     private fun showLoading(state: Boolean) {
         if (state) {
-            loadingDialog.show()
+            progress_bar.visibility = View.VISIBLE
+            container.visibility = View.GONE
         } else {
-            loadingDialog.dismiss()
+            progress_bar.visibility = View.GONE
+            container.visibility = View.VISIBLE
         }
     }
 

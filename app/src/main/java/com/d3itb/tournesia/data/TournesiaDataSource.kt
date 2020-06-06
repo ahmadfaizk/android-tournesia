@@ -32,6 +32,10 @@ interface TournesiaDataSource {
 
     fun deletePost(idPost: Int): LiveData<Resource<Post>>
 
+    fun getAllComment(idPost: Int): LiveData<Resource<List<Comment>>>
+
+    fun getMyComment(idPost: Int): LiveData<Resource<Comment>>
+
     fun createComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>>
 
     fun updateComment(idPost: Int, images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>>

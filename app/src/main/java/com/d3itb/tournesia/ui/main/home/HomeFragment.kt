@@ -26,7 +26,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var postAdapter: PostAdapter
-    private lateinit var loadingDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,10 +42,6 @@ class HomeFragment : Fragment() {
         rv_posts.layoutManager = LinearLayoutManager(context)
         rv_posts.adapter = postAdapter
         rv_posts.setHasFixedSize(true)
-        loadingDialog = AlertDialog.Builder(requireContext())
-            .setView(R.layout.dialog_loading)
-            .setCancelable(false)
-            .create()
 
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[HomeViewModel::class.java]
         viewModel.getListPost().observe(this.viewLifecycleOwner, Observer { data ->
@@ -78,9 +73,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showLoading(state: Boolean) {
-        if (state)
-            loadingDialog.show()
-        else
-            loadingDialog.dismiss()
+        if (state) {
+            progress_bar.visibility = View.VISIBLE
+            rv_posts.visibility = View.GONE
+        } else {
+            progress_bar.visibility = View.GONE
+            rv_posts.visibility = View.VISIBLE
+        }
     }
 }
