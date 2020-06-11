@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.api.ApiClient
 import com.d3itb.tournesia.model.Comment
@@ -39,9 +40,10 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
                 rb_votes.rating = comment.votes.toFloat()
                 tv_comment.text = comment.comment
                 tv_user_name.text = comment.userName
-                if (comment.images?.size != 0) {
+                if (comment.images.isNotEmpty()) {
                     Glide.with(itemView)
-                        .load(comment.images?.get(0)?.name?.let { ApiClient.getImageCommentUrl(it) })
+                        .load(comment.images[0].name.let { ApiClient.getImageCommentUrl(it) })
+                        .apply(RequestOptions().override(160, 90))
                         .into(img_comment)
                 } else {
                     img_comment.visibility = View.GONE

@@ -5,15 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_user"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_user_512dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/img_user"
+        app:layout_constraintStart_toEndOf="@+id/img_user"
+        app:layout_constraintTop_toTopOf="@+id/img_user"
         tools:text="@string/nama_lengkap" />
 
     <RatingBar
@@ -24,8 +36,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
+        android:isIndicator="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+        app:layout_constraintTop_toBottomOf="@+id/img_user" />
 
     <TextView
         android:id="@+id/tv_comment"

@@ -1,6 +1,5 @@
 package com.d3itb.tournesia.ui.auth.register
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,14 +9,20 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 
 import com.d3itb.tournesia.R
-import com.d3itb.tournesia.model.Token
 import com.d3itb.tournesia.model.User
 import com.d3itb.tournesia.utils.TokenPreference
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.fragment_register.btn_login
+import kotlinx.android.synthetic.main.fragment_register.btn_register
+import kotlinx.android.synthetic.main.fragment_register.edt_email
+import kotlinx.android.synthetic.main.fragment_register.edt_password
+import kotlinx.android.synthetic.main.fragment_register.img_logo
+import kotlinx.android.synthetic.main.fragment_register.progress_bar
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +41,9 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Glide.with(requireContext())
+            .load(R.drawable.logo_tournesia_2_transparent)
+            .into(img_logo)
         viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(requireContext()))[RegisterViewModel::class.java]
         btn_register.setOnClickListener {
             checkInput()

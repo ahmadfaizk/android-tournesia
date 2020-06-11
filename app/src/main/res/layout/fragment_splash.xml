@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     tools:context=".ui.auth.splash.SplashFragment">
 
     <ImageView
@@ -11,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/tournesia_square"
+        android:src="@drawable/logo_tournesia_1_transparent"
         android:contentDescription="@string/app_name" />
 
     <ProgressBar

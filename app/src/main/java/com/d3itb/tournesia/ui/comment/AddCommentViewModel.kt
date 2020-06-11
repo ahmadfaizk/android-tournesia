@@ -17,7 +17,7 @@ class AddCommentViewModel (private val tournesiaRepository: TournesiaRepository)
         postId.value = id
     }
 
-    var comment : LiveData<Resource<Comment>> = Transformations.switchMap(postId) { id ->
+    var comment: LiveData<Resource<Comment>> = Transformations.switchMap(postId) { id ->
         tournesiaRepository.getMyComment(id)
     }
 

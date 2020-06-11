@@ -36,6 +36,7 @@ class AddCommentActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID = "extra_id"
         const val EXTRA_EDIT = "extra_edit"
+        const val EXTRA_VOTES = "extra_votes"
         const val REQUEST_IMAGE_CAMERA = 1
         const val REQUEST_IMAGE_MEDIA = 2
 
@@ -68,6 +69,10 @@ class AddCommentActivity : AppCompatActivity() {
             requestData()
             btn_add.text = "Update"
         }
+        val votes = intent.extras?.getFloat(EXTRA_VOTES)
+        if (votes != null) {
+            rb_votes.rating = votes
+        }
         img_place.setOnClickListener {
             showDialogSelectImage()
         }
@@ -80,6 +85,17 @@ class AddCommentActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun validateForm() : Boolean {
+        var ready = true
+        val ratings = rb_votes.rating
+        val comment = edt_comment.text.toString()
+
+        if (ratings == 0f || comment.isEmpty()) {
+            ready = false
+        }
+        return ready
     }
 
     private fun requestData() {
@@ -98,17 +114,6 @@ class AddCommentActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private fun validateForm() : Boolean {
-        var ready = true
-        val ratings = rb_votes.rating
-        val comment = edt_comment.text.toString()
-
-        if (ratings == 0f || comment.isEmpty()) {
-            ready = false
-        }
-        return ready
     }
 
     private fun populateData(comment: Comment) {

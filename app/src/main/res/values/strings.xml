@@ -19,6 +19,16 @@
     <string name="image_post">Image Post</string>
     <string name="tambahkan">Tambahkan</string>
     <string name="loading">Loading...</string>
+    <string name="sampaikan_pendapat_anda">Sampaikan pendapat anda</string>
+    <string name="tulis_ulasan">Tulis Ulasan</string>
+    <string name="rating_dan_ulasan">Rating dan Ulasan</string>
+    <string name="diupload_oleh">Diupload Oleh</string>
+    <string name="lokasi">Lokasi</string>
+    <string name="region">Region</string>
+    <string name="_4_5_10_ulasan">4.5 - 10 ulasan</string>
+    <string name="register">REGISTER</string>
+    <string name="atau">Atau</string>
+    <string name="login">LOGIN</string>
     <string-array name="arr_media">
         <item>Kamera</item>
         <item>Galeri</item>

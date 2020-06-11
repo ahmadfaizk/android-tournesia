@@ -2,6 +2,8 @@ package com.d3itb.tournesia.ui.post
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -46,20 +48,39 @@ class PostActivity : AppCompatActivity() {
             viewModel.setPost(postId)
             requestData()
         }
-        btn_edit.setOnClickListener {
-            val intent = Intent(this, FormActivity::class.java)
-            intent.putExtra(FormActivity.EXTRA_ID, postId)
-            startActivityForResult(intent, FormActivity.REQUEST_UPDATE)
-        }
-        btn_delete.setOnClickListener {
-            showDialogDelete()
-        }
         btn_comment.setOnClickListener {
-            val comment = Intent(this, AddCommentActivity::class.java)
-            comment.putExtra(AddCommentActivity.EXTRA_ID, postId)
-            comment.putExtra(AddCommentActivity.EXTRA_EDIT, isComment)
-            startActivity(comment)
+            openComment(0f)
         }
+        rb_my_votes.setOnRatingBarChangeListener { _, rating, _ ->
+            openComment(rating)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.post_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_edit -> {
+                val intent = Intent(this, FormActivity::class.java)
+                intent.putExtra(FormActivity.EXTRA_ID, postId)
+                startActivityForResult(intent, FormActivity.REQUEST_UPDATE)
+            }
+            R.id.menu_delete -> {
+                showDialogDelete()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openComment(votes: Float) {
+        val comment = Intent(this, AddCommentActivity::class.java)
+        comment.putExtra(AddCommentActivity.EXTRA_ID, postId)
+        comment.putExtra(AddCommentActivity.EXTRA_EDIT, isComment)
+        comment.putExtra(AddCommentActivity.EXTRA_VOTES, votes)
+        startActivity(comment)
     }
 
     private fun requestData() {
@@ -78,7 +99,7 @@ class PostActivity : AppCompatActivity() {
                 }
             }
         })
-        viewModel.comment.observe(this, Observer { response ->
+        viewModel.comments.observe(this, Observer { response ->
             if (response != null) {
                 when(response.status) {
                     Status.SUCCESS -> {
@@ -101,14 +122,47 @@ class PostActivity : AppCompatActivity() {
             .into(img_post)
         tv_address.text = post.address
         tv_region.text = "${post.regency}, ${post.province}"
-        tv_votes.text = post.votes.toString()
+        tv_votes.text = "${post.votes} - ${post.votesCount} Ulasan"
+        rb_rating.rating = post.votes
         tv_description.text = post.description
         tv_author.text = "Diupload Oleh ${post.userName}"
-        if (post.isComment != null) {
-            btn_comment.text = "Edit Comment"
+        if (post.isComment != null && post.isComment!!) {
+            btn_comment.text = "Edit Ulasan Anda"
             isComment = true
+            getMyComment()
         } else {
-            btn_comment.text = "Add Comment"
+            btn_comment.text = "Tulis Ulasan"
+        }
+    }
+
+    private fun getMyComment() {
+        viewModel.comment.observe(this, Observer { response ->
+            if (response != null) {
+                when(response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let { populateMyComment(it) }
+                    }
+                    Status.ERROR -> {
+                        showMessage(response.message.toString())
+                    }
+                }
+            }
+        })
+    }
+
+    private fun populateMyComment(comment: Comment) {
+        layout_comment.visibility = View.VISIBLE
+        layout_add_comment.visibility = View.GONE
+        tv_rating_title.text = "Ulasan Anda"
+        tv_name_my_comment.text = comment.userName
+        rb_votes_my_comment.rating = comment.votes.toFloat()
+        tv_my_comment.text = comment.comment
+        if (comment.images.isNotEmpty()) {
+            Glide.with(this)
+                .load(ApiClient.getImageCommentUrl(comment.images[0].name))
+                .into(img_my_comment)
+        } else {
+            img_my_comment.visibility = View.GONE
         }
     }
 
