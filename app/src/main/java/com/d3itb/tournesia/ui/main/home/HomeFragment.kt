@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
             override fun onCLick(post: Post) {
                 val intent = Intent(context, PostActivity::class.java)
                 intent.putExtra(PostActivity.EXTRA_ID, post.id)
-                startActivity(intent)
+                startActivityForResult(intent, PostActivity.REQUEST_UPDATE)
             }
         })
     }
@@ -75,6 +75,16 @@ class HomeFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PostActivity.REQUEST_UPDATE) {
+            when(resultCode) {
+                PostActivity.RESULT_UPDATE -> viewModel.refresh()
+                PostActivity.RESULT_DELETE -> viewModel.refresh()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

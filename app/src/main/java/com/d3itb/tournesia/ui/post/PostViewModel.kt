@@ -11,21 +11,26 @@ import com.d3itb.tournesia.vo.Resource
 
 class PostViewModel(private val tournesiaRepository: TournesiaRepository): ViewModel() {
     private var postId = MutableLiveData<Int>()
+    private val loadTrigger = MutableLiveData(Unit)
+
+    fun refresh() {
+        loadTrigger.value = Unit
+    }
 
     fun setPost(id: Int) {
         postId.value = id
     }
 
-    var post: LiveData<Resource<Post>> = Transformations.switchMap(postId) { id ->
-        tournesiaRepository.getPostById(id)
+    var post: LiveData<Resource<Post>> = Transformations.switchMap(loadTrigger) {
+        postId.value?.let { tournesiaRepository.getPostById(it) }
     }
 
-    var comments: LiveData<Resource<List<Comment>>> = Transformations.switchMap(postId) { id ->
-        tournesiaRepository.getAllComment(id)
+    var comments: LiveData<Resource<List<Comment>>> = Transformations.switchMap(loadTrigger) {
+        postId.value?.let { tournesiaRepository.getAllComment(it) }
     }
 
-    var comment: LiveData<Resource<Comment>> = Transformations.switchMap(postId) { id ->
-        tournesiaRepository.getMyComment(id)
+    var comment: LiveData<Resource<Comment>> = Transformations.switchMap(loadTrigger) {
+        postId.value?.let { tournesiaRepository.getMyComment(it) }
     }
 
     fun deletePost() : LiveData<Resource<Post>>? = postId.value?.let { tournesiaRepository.deletePost(it) }

@@ -42,10 +42,11 @@ class AddCommentActivity : AppCompatActivity() {
         const val REQUEST_IMAGE_CAMERA = 1
         const val REQUEST_IMAGE_MEDIA = 2
 
-        const val REQUEST_ADD = 101
-        const val REQUEST_UPDATE = 102
-        const val RESULT_ADD = 201
-        const val RESULT_UPDATE = 202
+        const val REQUEST_ADD = 11
+        const val REQUEST_UPDATE = 12
+        const val RESULT_ADD = 21
+        const val RESULT_UPDATE = 22
+        const val RESULT_DELETE = 23
     }
 
     private lateinit var viewModel: AddCommentViewModel
@@ -133,25 +134,6 @@ class AddCommentActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun deleteComment() {
-        viewModel.deleteComment()?.observe(this, Observer { response ->
-            if (response != null) {
-                when(response.status) {
-                    Status.LOADING -> showLoading(true)
-                    Status.SUCCESS -> {
-                        showLoading(false)
-                        showMessage("Berhasil Menghapus Komentar")
-                        finish()
-                    }
-                    Status.ERROR -> {
-                        showLoading(false)
-                        showMessage(response.message.toString())
-                    }
-                }
-            }
-        })
     }
 
     private fun showDialogDelete() {
@@ -268,7 +250,7 @@ class AddCommentActivity : AppCompatActivity() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        showMessage("Berhasil Membuat Komentar")
+                        setResult(RESULT_ADD)
                         finish()
                     }
                     Status.ERROR -> {
@@ -296,7 +278,26 @@ class AddCommentActivity : AppCompatActivity() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        showMessage("Berhasil Mengubah Komentar")
+                        setResult(RESULT_UPDATE)
+                        finish()
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        showMessage(response.message.toString())
+                    }
+                }
+            }
+        })
+    }
+
+    private fun deleteComment() {
+        viewModel.deleteComment()?.observe(this, Observer { response ->
+            if (response != null) {
+                when(response.status) {
+                    Status.LOADING -> showLoading(true)
+                    Status.SUCCESS -> {
+                        showLoading(false)
+                        setResult(RESULT_DELETE)
                         finish()
                     }
                     Status.ERROR -> {

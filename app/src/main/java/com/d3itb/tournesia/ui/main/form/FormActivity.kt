@@ -55,9 +55,7 @@ class FormActivity : AppCompatActivity() {
         const val REQUEST_IMAGE_CAMERA = 1
         const val REQUEST_IMAGE_MEDIA = 2
 
-        const val REQUEST_ADD = 101
         const val REQUEST_UPDATE = 102
-        const val RESULT_ADD = 201
         const val RESULT_UPDATE = 202
     }
 
@@ -312,8 +310,7 @@ class FormActivity : AppCompatActivity() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        showMessage("Sukses Create Post")
-                        setResult(RESULT_ADD)
+                        showMessage("Berhasil Menambahkan Tempat Baru")
                         finish()
                     }
                     Status.ERROR -> {

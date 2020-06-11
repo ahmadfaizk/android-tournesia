@@ -20,7 +20,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:text="Nama Tempat"
+            android:text="@string/nama_tempat"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,11 +50,11 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_location_on_24dp"
-            android:drawableLeft="@drawable/ic_location_on_24dp"
+            android:drawableStart="@drawable/ic_baseline_location_on_24"
+            android:drawableLeft="@drawable/ic_baseline_location_on_24"
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
-            android:text="Alamat"
+            android:text="@string/alamat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_post" />
@@ -63,7 +63,7 @@
             android:id="@+id/tv_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3.0"
+            android:text="@string/_0_0"
             android:padding="4dp"
             android:textColor="@android:color/white"
             android:background="@drawable/bg_votes"

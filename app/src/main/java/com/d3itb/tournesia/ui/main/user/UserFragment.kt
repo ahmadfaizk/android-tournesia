@@ -67,9 +67,14 @@ class UserFragment : Fragment() {
     }
 
     private fun showLoading(state: Boolean) {
-        if (state)
+        if (state) {
             progress_bar.visibility = View.VISIBLE
-        else
+            container.visibility = View.GONE
+        }
+        else {
             progress_bar.visibility = View.GONE
+            container.visibility = View.VISIBLE
+        }
+
     }
 }

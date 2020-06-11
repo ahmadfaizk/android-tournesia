@@ -30,6 +30,7 @@
     <string name="atau">Atau</string>
     <string name="login">LOGIN</string>
     <string name="pencarian">Pencarian</string>
+    <string name="_0_0">0.0</string>
     <string-array name="arr_media">
         <item>Kamera</item>
         <item>Galeri</item>

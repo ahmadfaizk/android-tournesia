@@ -26,6 +26,10 @@ class PostActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_ID = "extra_id"
+
+        const val REQUEST_UPDATE = 12
+        const val RESULT_UPDATE = 22
+        const val RESULT_DELETE = 23
     }
 
     private lateinit var viewModel: PostViewModel
@@ -80,7 +84,11 @@ class PostActivity : AppCompatActivity() {
         comment.putExtra(AddCommentActivity.EXTRA_ID, postId)
         comment.putExtra(AddCommentActivity.EXTRA_EDIT, isComment)
         comment.putExtra(AddCommentActivity.EXTRA_VOTES, votes)
-        startActivity(comment)
+        if (isComment) {
+            startActivityForResult(comment, AddCommentActivity.REQUEST_UPDATE)
+        } else {
+            startActivityForResult(comment, AddCommentActivity.REQUEST_ADD)
+        }
     }
 
     private fun requestData() {
@@ -187,8 +195,23 @@ class PostActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FormActivity.REQUEST_UPDATE && resultCode == FormActivity.RESULT_UPDATE) {
-            showMessage("Berhasil Mengubah Data")
-            requestData()
+            showMessage("Berhasil Mengubah Data Tempat")
+            setResult(RESULT_UPDATE)
+            viewModel.refresh()
+        }
+        else if (requestCode == AddCommentActivity.REQUEST_ADD && resultCode == AddCommentActivity.RESULT_ADD) {
+            showMessage("Berhasil Menambahkan Komentar")
+            setResult(RESULT_UPDATE)
+            viewModel.refresh()
+        }
+        else if (requestCode == AddCommentActivity.REQUEST_UPDATE && resultCode == AddCommentActivity.RESULT_UPDATE) {
+            showMessage("Berhasil Mengubah Komentar")
+            setResult(RESULT_UPDATE)
+            viewModel.refresh()
+        }
+        else if (requestCode == AddCommentActivity.REQUEST_UPDATE && resultCode == AddCommentActivity.RESULT_DELETE) {
+            showMessage("Berhasil Menghapus Komentar")
+            viewModel.refresh()
         }
     }
 
@@ -199,7 +222,8 @@ class PostActivity : AppCompatActivity() {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
                         showLoading(false)
-                        showMessage("Suskes Menghapus Tempat Ini.")
+                        setResult(RESULT_DELETE)
+                        showMessage("Berhasil Menghapus Tempat")
                         finish()
                     }
                     Status.ERROR -> {
