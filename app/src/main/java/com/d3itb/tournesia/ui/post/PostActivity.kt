@@ -103,7 +103,13 @@ class PostActivity : AppCompatActivity() {
             if (response != null) {
                 when(response.status) {
                     Status.SUCCESS -> {
-                        response.data?.let { commentAdapter.addComments(it) }
+                        val comments = response.data
+                        if (comments != null) {
+                            commentAdapter.addComments(comments)
+                            if (comments.isEmpty()) {
+                                tv_ratings_comment_title.text = "Belum Ada Ulasan"
+                            }
+                        }
                     }
                     Status.ERROR -> {
                         showMessage(response.message.toString())
@@ -122,7 +128,8 @@ class PostActivity : AppCompatActivity() {
             .into(img_post)
         tv_address.text = post.address
         tv_region.text = "${post.regency}, ${post.province}"
-        tv_votes.text = "${post.votes} - ${post.votesCount} Ulasan"
+        val rating = "%.1f".format(post.votes).replace(',', '.')
+        tv_votes.text = "$rating - ${post.votesCount} Ulasan"
         rb_rating.rating = post.votes
         tv_description.text = post.description
         tv_author.text = "Diupload Oleh ${post.userName}"
