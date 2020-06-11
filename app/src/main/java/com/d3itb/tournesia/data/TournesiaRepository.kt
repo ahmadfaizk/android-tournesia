@@ -29,6 +29,8 @@ class TournesiaRepository private constructor(private val remoteDataSource: Remo
 
     override fun getPostById(id: Int): LiveData<Resource<Post>> = remoteDataSource.getPostById(id)
 
+    override fun searchPost(name: String): LiveData<Resource<List<Post>>> = remoteDataSource.searchPost(name)
+
     override fun getCategory(): LiveData<Resource<List<Category>>> = remoteDataSource.getCategory()
 
     override fun getProvince(): LiveData<Resource<List<Province>>> = remoteDataSource.getListProvince()

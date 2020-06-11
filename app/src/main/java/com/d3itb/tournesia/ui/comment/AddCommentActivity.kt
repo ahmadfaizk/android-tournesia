@@ -96,6 +96,7 @@ class AddCommentActivity : AppCompatActivity() {
 
         if (ratings == 0f || comment.isEmpty()) {
             ready = false
+            showMessage("Anda Belum Mengisi Semua Datanya")
         }
         return ready
     }

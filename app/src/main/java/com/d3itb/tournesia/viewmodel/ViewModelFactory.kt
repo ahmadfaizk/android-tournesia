@@ -12,6 +12,8 @@ import com.d3itb.tournesia.ui.main.form.FormViewModel
 import com.d3itb.tournesia.ui.main.home.HomeViewModel
 import com.d3itb.tournesia.ui.main.user.UserViewModel
 import com.d3itb.tournesia.ui.post.PostViewModel
+import com.d3itb.tournesia.ui.search.SearchActivity
+import com.d3itb.tournesia.ui.search.SearchViewModel
 
 class ViewModelFactory private constructor(private val tournesiaRepository: TournesiaRepository): ViewModelProvider.NewInstanceFactory(){
 
@@ -45,6 +47,9 @@ class ViewModelFactory private constructor(private val tournesiaRepository: Tour
             }
             modelClass.isAssignableFrom(AddCommentViewModel::class.java) -> {
                 AddCommentViewModel(tournesiaRepository) as T
+            }
+            modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
+                SearchViewModel(tournesiaRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class : " + modelClass.name)
         }

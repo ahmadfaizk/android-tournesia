@@ -2,10 +2,8 @@ package com.d3itb.tournesia.ui.main.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -15,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d3itb.tournesia.R
 import com.d3itb.tournesia.model.Post
 import com.d3itb.tournesia.ui.post.PostActivity
+import com.d3itb.tournesia.ui.search.SearchActivity
 import com.d3itb.tournesia.viewmodel.ViewModelFactory
 import com.d3itb.tournesia.vo.Status
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -26,6 +25,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var postAdapter: PostAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +70,21 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_search -> {
+                val search = Intent(context, SearchActivity::class.java)
+                startActivity(search)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showMessage(message: String) {

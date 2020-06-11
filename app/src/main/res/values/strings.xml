@@ -29,6 +29,7 @@
     <string name="register">REGISTER</string>
     <string name="atau">Atau</string>
     <string name="login">LOGIN</string>
+    <string name="pencarian">Pencarian</string>
     <string-array name="arr_media">
         <item>Kamera</item>
         <item>Galeri</item>

@@ -20,6 +20,8 @@ interface TournesiaDataSource {
 
     fun getPostById(id: Int): LiveData<Resource<Post>>
 
+    fun searchPost(name: String): LiveData<Resource<List<Post>>>
+
     fun getCategory(): LiveData<Resource<List<Category>>>
 
     fun getProvince(): LiveData<Resource<List<Province>>>

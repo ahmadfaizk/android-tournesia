@@ -186,9 +186,11 @@ class FormActivity : AppCompatActivity() {
         val city = act_city.text.toString()
         if (name.isEmpty() || address.isEmpty() || description.isEmpty() || province.isEmpty() || city.isEmpty() || categoryId == 0) {
             ready = false
+            showMessage("Anda Belum Mengisi Semua Datanya")
         }
         if (currentPhotoPath == null && !isEdit) {
             ready = false
+            showMessage("Anda Belum Memilih Foto")
         }
         return ready
     }

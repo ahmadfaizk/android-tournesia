@@ -146,6 +146,26 @@ class RemoteDataSource private constructor(private val context: Context){
         return post
     }
 
+    fun searchPost(name: String): LiveData<Resource<List<Post>>> {
+        val listPost = MutableLiveData<Resource<List<Post>>>()
+        listPost.value = Resource.loading(null)
+        apiClient.searchPost("Bearer $token", name).enqueue(object : Callback<MultiResponse<Post>> {
+            override fun onResponse(call: Call<MultiResponse<Post>>, response: Response<MultiResponse<Post>>) {
+                val error = response.body()?.error
+                if (error != null && !error) {
+                    listPost.value = Resource.success(response.body()?.data)
+                } else {
+                    listPost.value = Resource.error(response.body()?.message, null)
+                }
+            }
+
+            override fun onFailure(call: Call<MultiResponse<Post>>, t: Throwable) {
+                listPost.value = Resource.error(t.message, null)
+            }
+        })
+        return listPost
+    }
+
     fun getListProvince(): LiveData<Resource<List<Province>>> {
         val listProvince = MutableLiveData<Resource<List<Province>>>()
         listProvince.value = Resource.loading(null)

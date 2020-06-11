@@ -35,6 +35,10 @@ interface Services {
     fun getPostById(@Header("Authorization") token: String,
                     @Path("id") id: Int): Call<SingleResponse<Post>>
 
+    @GET("post/search")
+    fun searchPost(@Header("Authorization") token: String,
+                   @Query("name") name: String): Call<MultiResponse<Post>>
+
     @GET("category")
     fun getCategory(@Header("Authorization") token: String): Call<MultiResponse<Category>>
 
