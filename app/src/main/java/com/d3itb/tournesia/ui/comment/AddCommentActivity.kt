@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -114,6 +116,52 @@ class AddCommentActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (isEdit) {
+            menuInflater.inflate(R.menu.comment_menu, menu)
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_delete -> {
+                showDialogDelete()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteComment() {
+        viewModel.deleteComment()?.observe(this, Observer { response ->
+            if (response != null) {
+                when(response.status) {
+                    Status.LOADING -> showLoading(true)
+                    Status.SUCCESS -> {
+                        showLoading(false)
+                        showMessage("Berhasil Menghapus Komentar")
+                        finish()
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        showMessage(response.message.toString())
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showDialogDelete() {
+        AlertDialog.Builder(this)
+            .setMessage("Apakah anda yakin menghapus komentar ini ?")
+            .setPositiveButton("Ya"
+            ) { _, _ -> deleteComment() }
+            .setNegativeButton("Batal"
+            ) { dialog, _ -> dialog?.dismiss() }
+            .create()
+            .show()
     }
 
     private fun populateData(comment: Comment) {

@@ -25,4 +25,5 @@ class AddCommentViewModel (private val tournesiaRepository: TournesiaRepository)
 
     fun updateComment(images: MultipartBody.Part?, params: HashMap<String, RequestBody>): LiveData<Resource<Comment>>? = postId.value?.let { tournesiaRepository.updateComment(it, images, params) }
 
+    fun deleteComment(): LiveData<Resource<Comment>>? = postId.value?.let { tournesiaRepository.deleteComment(it) }
 }
